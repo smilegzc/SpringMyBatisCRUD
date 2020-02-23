@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smile.springmybatiscrud.mapper.EmployeeMapper">
+
+<!--    Collection<Employee> getAllEmp();-->
+    <select id="getAllEmp" resultMap="empRs">
+        select * from employee e, department d where e.d_id=d.id
+    </select>
+    <resultMap id="empRs" type="com.smile.springmybatiscrud.entities.Employee">
+        <id property="id" column="id"/>
+        <result property="lastName" column="last_name"/>
+        <result property="email" column="email"/>
+        <result property="gender" column="gender"/>
+        <result property="birth" column="birth"/>
+        <association property="department" javaType="com.smile.springmybatiscrud.entities.Department">
+            <id property="id" column="d_id"/>
+            <result property="departmentName" column="department_name"/>
+        </association>
+    </resultMap>
+
+<!--    Employee getEmpById(int id);-->
+    <select id="getEmpById" resultMap="empRs">
+        select * from employee e, department d where e.d_id=d.id and e.id=#{id}
+    </select>
+
+<!--    Employee insertEmp(Employee emp);-->
+    <insert id="insertEmp">
+        insert into employee(last_name, email, gender, d_id, birth)
+        values (#{lastName}, #{email}, #{gender}, #{department.id}, #{birth});
+    </insert>
+
+<!--    void delEmp(int id);-->
+    <delete id="delEmp">
+        delete from employee where id=#{id}
+    </delete>
+    <update id="updateEmp">
+        update employee set last_name=#{lastName}, email=#{email}, gender=#{gender}, d_id=#{department.id}, birth=#{birth} where id=#{id}
+    </update>
+</mapper>
